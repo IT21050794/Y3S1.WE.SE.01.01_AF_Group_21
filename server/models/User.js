@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { isEmail } = require('validator');
 
+const roles = ['citizen','employee','admin']
+
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -14,6 +16,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please enter an Email'],
         minlength: [6, "Minimum password length is 6 characters"]
+    },
+    role: {
+        type: String,
+        required: true,
+        enum: roles
     }
 });
 

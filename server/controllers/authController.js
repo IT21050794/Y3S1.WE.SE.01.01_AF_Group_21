@@ -58,15 +58,16 @@ module.exports.login_get = (req, res) => {
 
 }
 
+//create user
 module.exports.signup_post = async (req, res) => {
 
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     try{
-        const newUser = await User.create({ email, password });
+        const newUser = await User.create({ email, password, role });
         const token = createToken(newUser._id);
         res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
-        res.status(201).json(newUser._id);
+        res.status(201).json({ userID: newUser._id });
     }catch(error){
         const errors = handleErrors(error);
         res.status(400).json({ errors });
@@ -74,6 +75,7 @@ module.exports.signup_post = async (req, res) => {
 
 }
 
+//login a user
 module.exports.login_post = async (req, res) => {
 
     const { email, password } = req.body;
@@ -90,4 +92,38 @@ module.exports.login_post = async (req, res) => {
         res.status(400).json({ errors });
     }
 
+}
+
+//for development purposes
+module.exports.deleteAll = async (req, res) => {
+    try {
+        const result = await User.deleteMany();
+        res.status(200).json({ result });
+    } catch (err) {
+        res.status(400).json({ error });
+    }
+}
+
+//for development purposes
+module.exports.getUser = async (req, res) => {
+
+    const currentUser = res.locals.user;
+
+    try{
+        if(!currentUser){
+            res.status(400).json('user not there');
+        }
+
+        res.status(200).json({ currentUser });
+    }catch(error){
+        res.status(400).json({ error });
+    }
+
+
+}
+
+//logOut the user
+module.exports.logout_get = (req, res) => {
+    res.cookie('jwt', '', {maxAge: 1});
+    res.json('LoggedOut successfully');
 }
