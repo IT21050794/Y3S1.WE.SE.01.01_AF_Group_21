@@ -10,4 +10,4 @@ router.get('/getUser', authMiddleware.requireAuth, authMiddleware.checkUser, aut
 router.delete('/deleteAll', authController.deleteAll); //for dev purposes
 router.get('/logout', authController.logout_get);
 
-module.exports = router
+module.exports = router;

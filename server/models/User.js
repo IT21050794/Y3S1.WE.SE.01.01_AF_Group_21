@@ -4,6 +4,7 @@ const { isEmail } = require('validator');
 
 const roles = ['citizen','employee','admin']
 
+//User schema
 const userSchema = new mongoose.Schema({
     email: {
         type: String,

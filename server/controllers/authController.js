@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Citizen = require('../models/Citizen');
 const jwt = require('jsonwebtoken');
 const config = require('../config/serverConfig');
 
@@ -45,30 +46,38 @@ const createToken = (id) => {
 
 }
 
-
-module.exports.signup_get = (req, res) => {
-
-    res.json('signup');
-
-}
-
-module.exports.login_get = (req, res) => {
-
-    res.json('login');
-
-}
-
 //create user
 module.exports.signup_post = async (req, res) => {
 
-    const { email, password, role } = req.body;
+    const userDetails = req.body;
+    const genUser = { email: userDetails.email, password: userDetails.password, role: userDetails.role }
 
     try{
-        const newUser = await User.create({ email, password, role });
+        const newUser = await User.create(genUser);
+
+        if(newUser.role === 'citizen'){
+
+            const citizen = {
+                _id: newUser._id,
+                email: newUser.email,
+                password: newUser.password,
+                role: newUser.role,
+                firstName: userDetails.firstName,
+                lastName: userDetails.lastName,
+                nic: userDetails.nic,
+                contactNo: userDetails.contactNo,
+                address: userDetails.address,
+                dob: userDetails.dob
+            }
+
+            newCitizen = await Citizen.create(citizen);
+        }
+
         const token = createToken(newUser._id);
         res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
         res.status(201).json({ userID: newUser._id });
     }catch(error){
+        console.log(error);
         const errors = handleErrors(error);
         res.status(400).json({ errors });
     }

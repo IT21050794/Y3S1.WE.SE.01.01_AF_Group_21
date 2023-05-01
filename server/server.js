@@ -1,12 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const authRoutes = require('./routes/authRoutes');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
 
 const config = require('./config/serverConfig');
+
+const authRoutes = require('./routes/authRoutes');
+const citizenRoutes = require('./routes/citizen/v1/citizenRoutes');
 
 const app = express();
 
@@ -17,6 +19,7 @@ app.use(cookieParser());
 
 //routes
 app.use(authRoutes);
+app.use('/api', citizenRoutes);
 
 //mongoDB connection
 mongoose.set('strictQuery', false);
