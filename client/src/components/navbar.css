@@ -6,6 +6,59 @@
 
 @tailwind utilities;
 
+
+/* Mobile navbar */
+@media (max-width: 767px) {
+  .navigation {
+    position: relative;
+  }
+  .navbar-toggler {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .navbar-collapse {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    z-index: 999;
+    padding: 20px;
+    display: none;
+  }
+  .navbar-collapse.show {
+    display: block;
+  }
+  .nav-link {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+  }
+}
+
+/* Tablet and desktop navbar */
+@media (min-width: 768px) {
+  .navbar-toggler {
+    display: none;
+  }
+  .navbar-collapse {
+    position: static !important;
+    display: flex !important;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .nav-link {
+    padding: 0 15px;
+    border: none;
+  }
+  .header-btn {
+    display: block;
+  }
+}
+
+
 /* apply css classes */
 body {
   font-family: "Montserrat", sans-serif;
