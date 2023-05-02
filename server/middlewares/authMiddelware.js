@@ -6,7 +6,7 @@ const serverConfig = require('../config/serverConfig');
 const requireAuth = (req, res, next) => {
 
     const token = req.cookies.jwt;
-
+    console.log('in require auth');
     //check json web token exsists & is verified
     if(token) {
         jwt.verify(token, serverConfig.JWT_SECRET, (err, decodedToken) => {
@@ -28,6 +28,7 @@ const checkUser = (req, res, next) => {
 
     const token = req.cookies.jwt;
 
+    console.log('in check user');
     if(token) {
         jwt.verify(token, serverConfig.JWT_SECRET, async (err, decodedToken) => {
             if(err) {

@@ -12,7 +12,7 @@ exports.updateCitizen = async (req, res) => {
         const citizen = await Citizen.findById(id);
 
         if(!citizen){
-            res.status(404).json({ error: 'user not found'});
+            return res.status(404).json({ error: 'user not found'});
         }else{
             const currentUserRole = user.role;
 
@@ -28,11 +28,11 @@ exports.updateCitizen = async (req, res) => {
                     return res.status(400).json({error: 'user update failed'});
                 }
 
-                res.status(200).json({ updatedCitizen });
+                return res.status(200).json({ updatedCitizen });
 
             }
             else{
-                res.status(403).json('access denied');
+                return res.status(403).json({ error: 'access denied' });
             }
         }
     }catch(error){
@@ -53,16 +53,16 @@ exports.getCitizen = async (req, res) => {
             const citizen = await Citizen.findById(id);
 
             if(!citizen){
-                return res.status(404).json('user not found');
+                return res.status(404).json({ error:'user not found' });
             }
     
-            res.status(200).json({ citizen });
+            return res.status(200).json({ citizen });
         }else{
-            res.status(403).json('access denied');
+            return res.status(403).json({ error: 'access denied' });
         }
 
     }catch(error){
-        res.status(400).json({ error });
+        return res.status(400).json({ error });
     }
 
 }
@@ -78,38 +78,46 @@ exports.deleteCitizen = async (req, res) => {
             const citizen = await Citizen.findOneAndDelete(id);
 
             if(!citizen){
-                return res.status(404).json('user not found');
+                return res.status(404).json({ error:'user not found' });
             }
 
             const user = await User.findOneAndDelete(id);
 
             if(!user){
-                return res.status(404).json('user not found');
+                return res.status(404).json({ error: 'user not found' });
             }
     
-            res.status(204).json('user deleted');
+            return res.status(204).json({ message: 'user deleted' });
         }else{
-            res.status(403).json('access denied');
+            return res.status(403).json({ error:'access denied' });
         }
 
     }catch(error){
-        res.status(400).json({ error });
+        return res.status(400).json({ error });
     }
 
 }
 
 exports.getAllCitizens = async(req, res) => {
 
+    const user = res.locals.user;
+    const curretnUserrole = user.role;
+
     try{
-        const citizens = await Citizen.find({});
+        if(currentUserRole === 'admin'){
+            const citizens = await Citizen.find({});
         
-        if(!citizens){
-            res.status(404).json('no users available');
+            if(!citizens){
+                return res.status(404).json({ error: 'no users available' });
+            }
+    
+            return res.status(200).json({ citizens });
+        }else{
+            return res.status(403).json({error: 'access denied'})
         }
 
-        res.status(200).json({ citizens });
     }catch(error){
-        res.status(400).json({ error });
+        return res.status(400).json({ error });
     }
 
 }
