@@ -32,7 +32,11 @@ const citizenSchema = new mongoose.Schema({
     dob: {
         type: Date,
         required: true
-    }
+    },
+    paymentMethods: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'paymentmethod'
+    }]
 });
 
 //const Citizen = User.discriminator('citizen', citizenSchema);
