@@ -12,6 +12,8 @@ const authRoutes = require('./routes/authRoutes');
 const citizenRoutes = require('./routes/citizen/v1/citizenRoutes');
 const payMethodRoutes = require('./routes/payment/v1/paymentMethods');
 const paymentRoutes = require('./routes/payment/v1/payments');
+const tenderRoutes = require('./routes/tender/v1/tenders');
+const bidRoutes = require('./routes/tender/v1/bids');
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.use(authRoutes);
 app.use('/api/citizens', citizenRoutes);
 app.use('/api/payMethods', payMethodRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/tenders', tenderRoutes);
+app.use('/api/bids', bidRoutes);
 
 //mongoDB connection
 mongoose.set('strictQuery', false);
