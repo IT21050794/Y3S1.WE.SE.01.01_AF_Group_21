@@ -94,7 +94,6 @@ exports.updatePaymentStatus = async (req, res) => {
     const user = res.locals.user;
     const currentUserRole = user.role;
     const paymentId = req.params.id;
-    console.log(paymentId);
     const paymentStatus = req.body.paymentStatus;
 
     try{

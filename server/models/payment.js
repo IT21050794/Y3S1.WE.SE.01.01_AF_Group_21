@@ -6,6 +6,7 @@ const payStatus = ['pending', 'approved', 'rejected'];
 
 // Payment schema
 const paymentSchema = new mongoose.Schema({
+
     paymentReason: {
         type: String,
         required: true,
@@ -37,6 +38,7 @@ const paymentSchema = new mongoose.Schema({
         enum: payStatus,
         default: 'pending'
     }
+    
 });
 
 const Payment = mongoose.model('payment', paymentSchema);

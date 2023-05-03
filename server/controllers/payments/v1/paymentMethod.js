@@ -60,7 +60,7 @@ exports.deletePaymentMethod = async (req, res) => {
         if(user.role === 'citizen'){
             const paymentMethod = await PaymentMethod.findById(payMethodId);
             if(!paymentMethod){
-                return res.status(404).json('payment method not found');
+                return res.status(404).json({ error: 'payment method not found' });
             }
 
             const deletedPayMenthod = await PaymentMethod.findOneAndDelete(payMethodId);
