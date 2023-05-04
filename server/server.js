@@ -15,6 +15,8 @@ const paymentRoutes = require('./routes/payment/v1/payments');
 const tenderRoutes = require('./routes/tender/v1/tenders');
 const bidRoutes = require('./routes/tender/v1/bids');
 const approvalRoutes = require('./routes/approvals/v1/approvals');
+const complainRoutes = require('./routes/complains-proposals/v1/complains');
+const proposalRoutes = require('./routes/complains-proposals/v1/proposals');
 
 const app = express();
 
@@ -31,6 +33,8 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/tenders', tenderRoutes);
 app.use('/api/bids', bidRoutes);
 app.use('/api/approvals', approvalRoutes);
+app.use('/api/complains', complainRoutes);
+app.use('/api/suggestions', proposalRoutes);
 
 //mongoDB connection
 mongoose.set('strictQuery', false);
