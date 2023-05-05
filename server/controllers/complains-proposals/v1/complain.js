@@ -1,16 +1,20 @@
 const Citizen = require('../../../models/Citizen');
 const User = require('../../../models/User');
 const Complain = require('../../../models/Complain');
+const fs = require('fs');
+const mime = require('mime');
 
 exports.createComplain = async (req, res) => {
 
     const user = res.locals.user;
     const userId = user._id;
     const currentUserRole = user.role;
+    const image = req.file.filename;
     const complain = {
         issueLocation: req.body.issueLocation,
         natureOfComplain: req.body.natureOfComplain,
         severity: req.body.severity,
+        image: image,
         description: req.body.description,
         email: req.body.email,
         citizen: userId,
@@ -39,6 +43,46 @@ exports.createComplain = async (req, res) => {
         return res.status(400).json({ error });
     }
 
+}
+
+exports.downloadPicture = async (req, res) => {
+
+    const complainId = req.params.id
+    const user = res.locals.user;
+    const currentUserRole = user.role;
+
+    try{
+        if(currentUserRole === 'employee' || currentUserRole === 'citizen'){
+            const complain = await Complain.findById(complainId);
+
+            if(!complain) {
+                return res.status(404).json({ error: 'complain not found' });
+            }
+
+            const image = complain.image;
+
+            const filePath = `uploads/${image}`
+
+            if (!fs.existsSync(filePath)) {
+                return res.status(404).json({ error: 'image not found' });
+            }
+
+            // get the MIME type for the image based on its file extension
+            const mimeType = mime.getType(image);
+
+            // set the Content-Type header to the image's MIME type
+            res.setHeader('Content-Type', mimeType);
+            res.setHeader('Content-Disposition', `attachment; filename=${image}`);
+        
+            const stream = fs.createReadStream(filePath);
+            stream.pipe(res);
+        }else{
+            return res.status(403).json({error: 'access denied'});
+        }
+    }catch(error){
+        console.error(error);
+        return res.status(500).json({ error });
+    }
 }
 
 exports.getComplainsByUser = async (req, res) => {
@@ -138,6 +182,7 @@ exports.updateComplainStatus = async (req, res) => {
                 issueLocation: complain.issueLocation,
                 natureOfComplain: complain.natureOfComplain,
                 severity: complain.severity,
+                image: complain.image,
                 description: complain.description,
                 email: complain.email,
                 status: complainStatus,
@@ -188,6 +233,7 @@ exports.resolveComplain = async (req, res) => {
                 issueLocation: complain.issueLocation,
                 natureOfComplain: complain.natureOfComplain,
                 severity: complain.severity,
+                image: complain.image,
                 description: complain.description,
                 email: complain.email,
                 status: complainStatus,

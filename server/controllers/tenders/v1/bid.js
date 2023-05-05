@@ -2,18 +2,21 @@ const Citizen = require('../../../models/Citizen');
 const User = require('../../../models/User');
 const Bid = require('../../../models/Bid');
 const Tender = require('../../../models/Tender');
+const fs = require('fs');
 
 exports.createBid = async (req, res) => {
 
     const user = res.locals.user;
     const userId = user._id;
-    const currentUserRole = user.role;
+    const currentUserRole = user.role;                                                                                                                                                
     const tenderId = req.body.tender;
+    const pdf = req.file.filename;
     const bid = {
         email: req.body.email,
         companyName: req.body.companyName,
         contactNo: req.body.contactNo,
         bidAmount: req.body.bidAmount,
+        pdf: pdf,
         citizen: userId,
         tender: tenderId,      
     };
@@ -50,6 +53,41 @@ exports.createBid = async (req, res) => {
         return res.status(400).json({ error });
     }
 
+}
+
+exports.downloadDocument = async (req, res) => {
+
+    const bidId = req.params.id
+    const user = res.locals.user;
+    const currentUserRole = user.role;
+
+    try{
+        if(currentUserRole === 'employee' || currentUserRole === 'citizen'){
+            const bid = await Bid.findById(bidId);
+
+            if(!bid) {
+                return res.status(404).json({ error: 'bid not found' });
+            }
+
+            const pdf = bid.pdf; 
+            const filePath = `uploads/${pdf}`;
+
+            if (!fs.existsSync(filePath)) {
+                return res.status(404).json({ error: 'PDF not found' });
+            }
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=${pdf}`);
+        
+            const stream = fs.createReadStream(filePath);
+            stream.pipe(res);
+        }else{
+            return res.status(403).json({error: 'access denied'});
+        }
+    }catch(error){
+        console.error(error);
+        return res.status(500).json({ error });
+    }
 }
 
 exports.getAllBidByUser = async (req, res) => {
@@ -172,12 +210,12 @@ exports.updateBidStatus = async (req, res) => {
                 await Bid.updateMany({ tender: tenderId }, { status: 'rejected' });
             }));
 
-            //add pdf after implementing pdf upload feature
             const newBidDetails = {
                 email: bid.email,
                 company: bid.company,
                 contactNo: bid.contactno,
                 bidAmount: bid.bidAmount,
+                pdf: bid.pdf,
                 status: bidStatus,
                 citizen: bid.citizen,
                 tender: bid.tender,

@@ -16,7 +16,8 @@ const approvalSchema = new mongoose.Schema({
         validate: [isEmail, 'please enter a valid email']
     },
     pdf: {
-        type:String
+        type:String,
+        required: true
     },
     status: {
         type: String,

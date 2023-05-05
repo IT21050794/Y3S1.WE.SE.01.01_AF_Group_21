@@ -1,11 +1,13 @@
 const { Router } = require('express');
 const auth = require('../../../middlewares/authMiddelware');
 const proposal = require('../../../controllers/complains-proposals/v1/proposal');
+const upload = require('../../../middlewares/upload');
 
 const router = Router();
 
-router.post('/v1', auth.requireAuth, auth.checkUser, proposal.createSuggestion);
+router.post('/v1', auth.requireAuth, auth.checkUser, upload.single('pdf'), proposal.createSuggestion);
 router.get('/v1', auth.requireAuth, auth.checkUser, proposal.getSuggestionsByUser);
+router.get('/v1/:id/download', auth.requireAuth, auth.checkUser, proposal.downloadDocument);
 router.get('/v1/admin', auth.requireAuth, auth.checkUser, proposal.getAllSuggestions);
 router.get('/v1/emp/pending', auth.requireAuth, auth.checkUser, proposal.getPendingSuggestion);
 router.get('/v1/emp/reviewing', auth.requireAuth, auth.checkUser, proposal.getReviewingSuggestions);

@@ -18,7 +18,8 @@ const tenderSchema = new mongoose.Schema({
         required: true
     },
     pdf: {
-        type:String
+        type: String,
+        required: true
     },
     startDate: {
         type: Date,

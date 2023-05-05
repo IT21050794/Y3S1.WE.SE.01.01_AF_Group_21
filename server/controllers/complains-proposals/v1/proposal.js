@@ -1,18 +1,21 @@
 const Citizen = require('../../../models/Citizen');
 const User = require('../../../models/User');
 const Proposal = require('../../../models/Proposal');
+const fs = require('fs');
 
 exports.createSuggestion = async (req, res) => {
 
     const user = res.locals.user;
     const userId = user._id;
     const currentUserRole = user.role;
+    const pdf = req.file.filename;
     const suggestion = {
         title: req.body.title,
         goal: req.body.goal,
         scope: req.body.scope,
         advantages: req.body.advantages,
         description: req.body.description,
+        pdf: pdf,
         email: req.body.email,
         citizen: userId,
     };
@@ -93,6 +96,41 @@ exports.getPendingSuggestion = async (req, res) => {
         return res.status(400).json({error:error.message})
     }
 
+}
+
+exports.downloadDocument = async (req, res) => {
+
+    const suggestionId = req.params.id
+    const user = res.locals.user;
+    const currentUserRole = user.role;
+
+    try{
+        if(currentUserRole === 'employee' || currentUserRole === 'citizen'){
+            const suggestion = await Proposal.findById(suggestionId);
+
+            if(!suggestion) {
+                return res.status(404).json({ error: 'suggestion not found' });
+            }
+
+            const pdf = suggestion.pdf;
+            const filePath = `uploads/${pdf}`;
+
+            if (!fs.existsSync(filePath)) {
+                return res.status(404).json({ error: 'PDF not found' });
+            }
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=${pdf}`);
+        
+            const stream = fs.createReadStream(filePath);
+            stream.pipe(res);
+        }else{
+            return res.status(403).json({error: 'access denied'});
+        }
+    }catch(error){
+        console.error(error);
+        return res.status(500).json({ error });
+    }
 }
 
 exports.getReviewingSuggestions = async (req, res) => {
