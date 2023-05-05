@@ -26,7 +26,8 @@ const paymentSchema = new mongoose.Schema({
         default: Date.now
     },
     pdf: {
-        type: String
+        type: String,
+        required: true
     },
     citizen: {
         type: Schema.Types.ObjectId,

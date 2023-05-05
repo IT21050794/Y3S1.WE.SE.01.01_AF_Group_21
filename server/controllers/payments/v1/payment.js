@@ -1,15 +1,18 @@
 const Citizen = require('../../../models/Citizen');
 const PaymentMethod = require('../../../models/PaymentMethod');
 const Payment = require('../../../models/payment');
+const fs = require('fs');
 
 exports.createPayment = async (req, res) => {
 
     const user = res.locals.user;
     const userId = user._id;
+    const pdf = req.file.filename;
     const payment = {
         paymentReason: req.body.paymentReason,
         paymentDetailsId: req.body.paymentDetailsId,
         amount: req.body.amount,
+        pdf: pdf,
         citizen: userId,
     };
     
@@ -89,6 +92,39 @@ exports.getAllPayments = async (req, res) => {
 
 }
 
+exports.downloadDocument = async (req, res) => {
+
+    const user = res.locals.user;
+    const currentUserRole = user.role;
+
+    try{
+        if(currentUserRole === 'employee' || currentUserRole === 'citizen'){
+            const payment = await Payment.findById(req.params.id);
+
+            if(!payment) {
+                return res.status(404).json({ error: 'payment not found' });
+            }
+
+            const filePath = `uploads/${payment.pdf}`
+
+            if (!fs.existsSync(filePath)) {
+                return res.status(404).json({ error: 'PDF not found' });
+            }
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=${payment.pdf}`);
+        
+            const stream = fs.createReadStream(filePath);
+            stream.pipe(res);
+        }else{
+            return res.status(403).json({error: 'access denied'});
+        }
+    }catch(error){
+        console.error(error);
+        return res.status(500).json({ error });
+    }
+}
+
 exports.updatePaymentStatus = async (req, res) => {
  
     const user = res.locals.user;
@@ -110,6 +146,7 @@ exports.updatePaymentStatus = async (req, res) => {
                 paymentDetailsId: payment.paymentDetailsId,
                 amount: payment.amount,
                 date: payment.date,
+                pdf: payment.pdf,
                 citizen: payment.citizen,
                 status: paymentStatus
             };

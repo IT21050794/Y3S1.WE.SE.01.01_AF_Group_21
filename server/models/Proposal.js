@@ -26,7 +26,8 @@ const newSuggestionSchema = new mongoose.Schema({
         required: true
     },
     pdf: {
-        type: String
+        type: String,
+        required: true,
     },
     email: {
         type: String,
