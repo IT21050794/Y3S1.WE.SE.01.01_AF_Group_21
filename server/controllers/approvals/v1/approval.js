@@ -3,6 +3,7 @@ const User = require('../../../models/User');
 const Citizen = require('../../../models/Citizen');
 const fs = require('fs');
 
+//create an approval
 exports.createApproval = async (req, res) => {
 
     const user = res.locals.user;
@@ -23,6 +24,7 @@ exports.createApproval = async (req, res) => {
             return res.status(404).json({ error: 'user not found' });
         }
 
+        //check if the current user is a citizen
         if(currentUserRole === 'citizen'){
             const newApproval = await Approval.create(approval);
 
@@ -41,6 +43,7 @@ exports.createApproval = async (req, res) => {
 
 }
 
+//get approval requests done by a citizen
 exports.getApprovalsByUser = async (req, res) => {
 
     const user = res.locals.user;
@@ -70,6 +73,7 @@ exports.getApprovalsByUser = async (req, res) => {
 
 }
 
+//delete an approval request
 exports.deleteApproval = async (req, res) => {
 
     const user = res.locals.user;
