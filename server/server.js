@@ -17,6 +17,7 @@ const bidRoutes = require('./routes/tender/v1/bids');
 const approvalRoutes = require('./routes/approvals/v1/approvals');
 const complainRoutes = require('./routes/complains-proposals/v1/complains');
 const proposalRoutes = require('./routes/complains-proposals/v1/proposals');
+const employeeRoutes = require('./routes/employee/v1/employees');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/api/bids', bidRoutes);
 app.use('/api/approvals', approvalRoutes);
 app.use('/api/complains', complainRoutes);
 app.use('/api/suggestions', proposalRoutes);
+app.use('/api/employees', employeeRoutes);
 
 //mongoDB connection
 mongoose.set('strictQuery', false);

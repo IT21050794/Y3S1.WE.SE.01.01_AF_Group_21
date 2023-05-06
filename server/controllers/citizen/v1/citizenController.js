@@ -6,6 +6,7 @@ exports.updateCitizen = async (req, res) => {
 
     const user = res.locals.user;
     const id = user._id;
+    const currentUserRole = user.role;
     const newCitizenDetails = req.body;
 
     try{
@@ -14,7 +15,6 @@ exports.updateCitizen = async (req, res) => {
         if(!citizen){
             return res.status(404).json({ error: 'user not found'});
         }else{
-            const currentUserRole = user.role;
 
             if(currentUserRole === 'citizen') {
 
@@ -46,10 +46,11 @@ exports.getCitizen = async (req, res) => {
 
     const user = res.locals.user;
     const id = user._id;
+    const currentUserRole = user.role;
 
     try{
 
-        if(user.role === 'citizen'){
+        if(currentUserRole === 'citizen'){
             const citizen = await Citizen.findById(id);
 
             if(!citizen){
@@ -71,23 +72,26 @@ exports.deleteCitizen = async (req, res) => {
 
     const user = res.locals.user;
     const id = user._id;
+    const currentUserRole = user.role;
 
     try{
 
-        if(user.role === 'citizen'){
-            const citizen = await Citizen.findOneAndDelete(id);
+        if(currentUserRole === 'citizen'){
+            const citizen = await Citizen.findById(id);
 
             if(!citizen){
                 return res.status(404).json({ error:'user not found' });
             }
 
+            const deletedCitizen = await Citizen.findOneAndDelete(id);
+
             const user = await User.findOneAndDelete(id);
 
             if(!user){
-                return res.status(404).json({ error: 'user not found' });
+                return res.status(404).json({ error: 'account deletion failed' });
             }
     
-            return res.status(204).json({ message: 'user deleted' });
+            return res.status(200).json({ message: 'user deleted' });
         }else{
             return res.status(403).json({ error:'access denied' });
         }
@@ -101,7 +105,7 @@ exports.deleteCitizen = async (req, res) => {
 exports.getAllCitizens = async(req, res) => {
 
     const user = res.locals.user;
-    const curretnUserrole = user.role;
+    const currentUserRole = user.role;
 
     try{
         if(currentUserRole === 'admin'){
