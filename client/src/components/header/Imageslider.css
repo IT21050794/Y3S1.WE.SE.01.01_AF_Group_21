@@ -1,0 +1,41 @@
+.texts{
+	-webkit-perspective: 700px;
+	perspective: 700px;
+}
+.texts>span{
+	font-size: 130px;
+	font-family: "Poppins",sans-serif;
+	display: inline-block;
+	animation: flip 2.6s infinite linear;
+	transform-origin: 0 70%;
+	transform-style: preserve-3d;	
+}
+@keyframes flip{
+	35%{
+		transform: rotateX(360deg);
+	}
+	100%{
+		transform: rotateX(360deg);
+	}
+}
+.texts>span:nth-child(even){
+	color: #a1c0e9;
+}
+.texts>span:nth-child(2){
+	animation-delay: 0.3s;
+}
+.texts>span:nth-child(3){
+	animation-delay: 0.6s;
+}
+.texts>span:nth-child(4){
+	animation-delay: 0.9s;
+}
+.texts>span:nth-child(5){
+	animation-delay: 1.2s;
+}
+.texts>span:nth-child(6){
+	animation-delay: 1.5s;
+}
+.texts>span:nth-child(7){
+	animation-delay: 1.8s;
+}
