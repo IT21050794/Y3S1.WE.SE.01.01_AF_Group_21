@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Navbar = () => {
+const Navbar1 = () => {
   return (
     <>
   {/* Required meta tags */}
@@ -1456,4 +1456,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar1;
