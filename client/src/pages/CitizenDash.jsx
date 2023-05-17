@@ -83,7 +83,7 @@ export default function CitizenDash() {
            
         swalWithBootstrapButtons.fire(
           'Deleted!',
-          'This Employee Profile has been deleted.',
+          'This Citizen complaint has been deleted.',
           'success'
           
         )
