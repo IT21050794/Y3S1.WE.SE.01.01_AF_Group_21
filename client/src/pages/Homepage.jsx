@@ -7,7 +7,7 @@ import Card from "../components/card/card";
 import Imageslider from "../components/header/imageslider";
 
 
-function HomePage() {
+function Home() {
     return(
         <div>
         <Navbar/>
@@ -18,4 +18,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default Home;
