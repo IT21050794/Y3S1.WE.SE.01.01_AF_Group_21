@@ -1,0 +1,55 @@
+.DashContainer{
+    width: 100%;
+    min-height: 600px;
+}
+
+.innerContainer{
+    width: 80%;
+    min-height: 500px;
+    background-color: rgba(2, 1, 8, 0.24);
+    margin: auto;
+    margin-top: 50px;
+    
+}
+
+.emplist{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr ;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    grid-gap: 20px;
+    
+}
+
+.empcard{
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 50px;
+    height: 300px;
+}
+
+.filterBar{
+    display: flex;
+    justify-content: space-between;
+    width: 55%;
+    height: 70px;
+    margin: 0px auto;
+    background-color: rgb(126, 126, 165);
+}
+
+.imgView{
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    padding-left:25px;
+} 
+
+/* .selection{
+    position: relative;
+    float: right;
+    right:100px;
+    padding:10px;
+} */
