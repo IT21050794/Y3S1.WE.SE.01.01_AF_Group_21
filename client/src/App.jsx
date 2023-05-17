@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Homepage from "./pages/Homepage"
+import HomePage from "./pages/Homepage";
 import Paymentpage from "./pages/Paymentpage"
 import Paymentviewpage from './pages/Paymentviewpage';
 import Approval from "./pages/Approval"
