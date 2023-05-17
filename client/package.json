@@ -11,10 +11,14 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.1",
     "sweetalert2": "^11.7.5"
+    "@emotion/react": "^11.10.8",
+    "@emotion/styled": "^11.10.8",
+    "@mui/material": "^5.4.1",
+    "@mui/x-data-grid": "^6.3.0",
+    "react": "^17.0.2 || ^18.0.0",
+    "react-dom": "^17.0.2 || ^18.0.0",
+    "react-router-dom": "^6.11.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
@@ -28,5 +32,11 @@
     "postcss": "^8.4.23",
     "tailwindcss": "^3.3.2",
     "vite": "^4.3.2"
+  },
+  "peerDependencies": {
+    "@mui/material": "^5.4.1",
+    "@mui/system": "^5.4.1",
+    "react": "^17.0.2 || ^18.0.0",
+    "react-dom": "^17.0.2 || ^18.0.0"
   }
 }
